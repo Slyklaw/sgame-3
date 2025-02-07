@@ -12,6 +12,7 @@ Add a counter to each side of the screen that displays how many pieces each play
 In the upper-left corner, display "Player 1" and his score.
 In the upper-right corner, display "Player 2" and his score.
 In the top center, display who's turn it is.
+Scale the board to fit the window, but keep board places square.
 A Player's score is equal to the number of pieces he has on the board.
 Give the squares a subtle checkerboard effect just for looks, it won't affect gameplay.
 The board has 15 columns and 7 rows with square spaces.
@@ -32,6 +33,8 @@ Condition 2, eliminate all opponent pieces.
 Use simple click/tap interface to select a piece, and then to select where to move the piece.
 The piece can move in any straight cardinal direction, like a Queen in chess.
 The distance moved must always equal the number of pieces in the column at the time the piece is selected.
+The Crown is not counted as a Piece for purposes of movement.
+When a Player has captured the Crown, display an indicator on the player piece to indicate possession of the crown.
 The valid moves for distance N are (-N, -N), (-N, 0), (-N, +N), and so on.
 Pieces may not move off the board, nor may they move where the moving Player already has a piece.
 They may however move onto an opponent's piece.
@@ -44,10 +47,15 @@ When Restart is clicked, clear the banner and reset the board and score to initi
 google/gemini-2.0-pro-exp-02-05:free
 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
 
-Result:
-Impressive.
-A few adjustments to prompt needed:
+google/gemini-2.0-flash-thinking-exp:free
+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
+Doesn't work.
 
-Crown isn't a piece for purposes of movement range.
-Display player with Crown.
-Scale the board to fit the window, but keep board places square.
+google/gemini-2.0-flash-lite-preview-02-05:free
+So fast!
+Pieces not movable.
+Home shouldn't have a piece.
+
+google/gemini-2.0-flash-exp:free
+Almost, some version incompatibility.
+
