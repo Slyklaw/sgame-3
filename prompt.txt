@@ -3,15 +3,13 @@ Prompt:
 Let's make a two-player turn-based board game named "Sabotage".
 It should be playable on mobile devices and desktop browsers.
 Use a modern dark color theme.
-Use Expo SDK for React Native.
-Use the modern commands npm/npx for cli tooling.
+Use Expo SDK for React Native with a "blank" template.
 Be sure to give instructions for initial project setup and to install any necessary dependencies.
 It should look like a classic board game along the lines of checkers or chess.
-At the top of the screen, in the middle, display the current player's piece.
-Add a counter to each side of the screen that displays how many pieces each player still has on board.
+A Player's score is how many pieces he still has on the board.
 In the upper-left corner, display "Player 1" and his score.
 In the upper-right corner, display "Player 2" and his score.
-In the top center, display who's turn it is.
+In the top center, display whose turn it is.
 Scale the board to fit the window, but keep board places square.
 A Player's score is equal to the number of pieces he has on the board.
 Give the squares a subtle checkerboard effect just for looks, it won't affect gameplay.
@@ -32,7 +30,7 @@ Condition 1, capture the Crown and return it Home.
 Condition 2, eliminate all opponent pieces.
 Use simple click/tap interface to select a piece, and then to select where to move the piece.
 The piece can move in any straight cardinal direction, like a Queen in chess.
-The distance moved must always equal the number of pieces in the column at the time the piece is selected.
+The distance to move, N, must always equal the number of pieces in the column at the time the piece is selected.
 The Crown is not counted as a Piece for purposes of movement.
 When a Player has captured the Crown, display an indicator on the player piece to indicate possession of the crown.
 The valid moves for distance N are (-N, -N), (-N, 0), (-N, +N), and so on.
@@ -59,3 +57,9 @@ Home shouldn't have a piece.
 google/gemini-2.0-flash-exp:free
 Almost, some version incompatibility.
 
+deepseek/deepseek-r1:free
+Too many errors.
+
+google/gemini-2.0-pro-exp-02-05:free
+Repeat:
+* add blank template
