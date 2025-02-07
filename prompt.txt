@@ -1,24 +1,43 @@
-git@github.com:Slyklaw/sgame-3.git
-
-Model:
-meta-llama/llama-3.1-405b-instruct:free
-
 Prompt:
-create a simple tictactoe game using html and javascript.
 
-Result:
-FAIL - started good, didn't do anything.
-
-
-Model:
-mistralai/mistral-7b-instruct:free
-
-Result:
-FAIL - good start, tried to edit new files but failed.
-
-Model:
-Mrs_peanutbutt3r/deepseek-r1-coder-tools:8b
-
-Result:
-ALMOST - always switches to Python.
+Let's make a two-player turn-based board game named "Sabotage".
+It should be playable on mobile devices and desktop browsers.
+Use a modern dark color theme.
+Use Expo SDK for React Native.
+Use the modern commands npm/npx for cli tooling.
+Be sure to give instructions for initial project setup and to install any necessary dependencies.
+It should look like a classic board game along the lines of checkers or chess.
+At the top of the screen, in the middle, display the current player's piece.
+Add a counter to each side of the screen that displays how many pieces each player still has on board.
+In the upper-left corner, display "Player 1" and his score.
+In the upper-right corner, display "Player 2" and his score.
+In the top center, display who's turn it is.
+A Player's score is equal to the number of pieces he has on the board.
+Give the squares a subtle checkerboard effect just for looks, it won't affect gameplay.
+The board has 15 columns and 7 rows with square spaces.
+We can refer to specific spots by a tuple (column, row) format using 0-based indexing.
+The center spot is then (7, 3).
+Make sure the whole game is centered and fully visible on the screen without any scrolling.
+Assign each player a color with good contrast against the board.
+The players start on opposite sides.
+The center of the left side (3,3) is Player 1's Home.
+The center of the right side (11,3) is Player 2's Home.
+Color each Home the color of the cooresponding Player's color.
+Each player starts with 4 pieces that begin adjacent to their Home (N, S, W, E of Home).
+A Crown is placed in the center of the board.
+The goal is to capture the Crown and return it Home.
+There are 2 win conditions:
+Condition 1, capture the Crown and return it Home.
+Condition 2, eliminate all opponent pieces.
+Use simple click/tap interface to select a piece, and then to select where to move the piece.
+The piece can move in any straight cardinal direction, like a Queen in chess.
+The distance moved must always equal the number of pieces in the column at the time the piece is selected.
+The valid moves for distance N are (-N, -N), (-N, 0), (-N, +N), and so on.
+Pieces may not move off the board, nor may they move where the moving Player already has a piece.
+They may however move onto an opponent's piece.
+When the piece to be moved is selected, highlight the legal destination moves.
+When a piece lands on the Crown, that piece takes the Crown.
+When a piece lands on the opponent's piece, the opponent's piece is removed from the board and the counter is updated.
+When the game is won, proudly display a Winner banner, and show a Restart button to start a new game.
+When Restart is clicked, clear the banner and reset the board and score to initial conditions.
 
