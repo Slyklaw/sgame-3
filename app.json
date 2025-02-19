@@ -3,7 +3,7 @@
     "name": "sgame-3",
     "slug": "sgame-3",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "landscape",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
