@@ -90,6 +90,9 @@ export default function App() {
   }, []);
 
   const handleSquarePress = (x, y) => {
+    // If there's a winner, prevent any further moves
+    if (gameState.winner) return;
+
     const piece = gameState.board[x][y];
 
     // If no piece is selected and the clicked square has current player's piece
@@ -253,9 +256,19 @@ export default function App() {
               }
             ]}
           >
-            {gameState.winner ? 
-              `Player ${gameState.winner} Wins!` : 
-              `Player ${gameState.currentPlayer}'s Turn`}
+            {gameState.winner ? (
+              <View style={styles.winnerContainer}>
+                <Text style={styles.winnerText}>{`Player ${gameState.winner} Wins!`}</Text>
+                <TouchableOpacity 
+                  style={styles.resetButton}
+                  onPress={() => setGameState(initialGameState)}
+                >
+                  <Text style={styles.resetButtonText}>Reset Game</Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              `Player ${gameState.currentPlayer}'s Turn`
+            )}
           </Text>
           <Text style={[styles.playerText, { color: darkTheme.colors.player2 }]}>
             Player 2: {gameState.player2Score}
@@ -331,4 +344,25 @@ const styles = StyleSheet.create({
     borderColor: '#FFD700',
     borderWidth: 4,
   },
+  winnerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10
+  },
+  resetButton: {
+    backgroundColor: darkTheme.colors.primary,
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    borderRadius: 5
+  },
+  resetButtonText: {
+    color: darkTheme.colors.text,
+    fontSize: 14,
+    fontWeight: 'bold'
+  },
+  winnerText: {
+    color: darkTheme.colors.primary,
+    fontSize: 18,
+    fontWeight: 'bold'
+  }
 });
