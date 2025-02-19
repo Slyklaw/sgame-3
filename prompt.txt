@@ -1,0 +1,68 @@
+Prompt:
+
+Let's make a two-player turn-based board game named "Sabotage".
+It should be playable on mobile devices and desktop browsers.
+Use a modern dark color theme.
+Use Expo SDK for React Native with a "blank" template.
+Be sure to give instructions for initial project setup and to install any necessary dependencies.
+It should look like a classic board game along the lines of checkers or chess.
+A Player's score is how many pieces he still has on the board.
+In the upper-left corner, display "Player 1" and his score.
+In the upper-right corner, display "Player 2" and his score.
+In the top center, display whose turn it is.
+Scale the board to fit the window, but keep board places square.
+A Player's score is equal to the number of pieces he has on the board.
+Give the squares a subtle checkerboard effect just for looks, it won't affect gameplay.
+The board has 15 columns and 7 rows with square spaces.
+We can refer to specific spots by a tuple (column, row) format using 0-based indexing.
+The center spot is then (7, 3).
+Make sure the whole game is centered and fully visible on the screen without any scrolling.
+Assign each player a color with good contrast against the board.
+The players start on opposite sides.
+The center of the left side (3,3) is Player 1's Home.
+The center of the right side (11,3) is Player 2's Home.
+Color each Home the color of the cooresponding Player's color.
+Each player starts with 4 pieces that begin adjacent to their Home (N, S, W, E of Home).
+A Crown is placed in the center of the board.
+The goal is to capture the Crown and return it Home.
+There are 2 win conditions:
+Condition 1, capture the Crown and return it Home.
+Condition 2, eliminate all opponent pieces.
+Use simple click/tap interface to select a piece, and then to select where to move the piece.
+The piece can move in any straight cardinal direction, like a Queen in chess.
+The distance to move, N, must always equal the number of pieces in the column at the time the piece is selected.
+The Crown is not counted as a Piece for purposes of movement.
+When a Player has captured the Crown, display an indicator on the player piece to indicate possession of the crown.
+The valid moves for distance N are (-N, -N), (-N, 0), (-N, +N), and so on.
+Pieces may not move off the board, nor may they move where the moving Player already has a piece.
+They may however move onto an opponent's piece.
+When the piece to be moved is selected, highlight the legal destination moves.
+When a piece lands on the Crown, that piece takes the Crown.
+When a piece lands on the opponent's piece, the opponent's piece is removed from the board and the counter is updated.
+When the game is won, proudly display a Winner banner, and show a Restart button to start a new game.
+When Restart is clicked, clear the banner and reset the board and score to initial conditions.
+
+google/gemini-2.0-pro-exp-02-05:free
+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
+
+google/gemini-2.0-flash-thinking-exp:free
+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
+Doesn't work.
+
+google/gemini-2.0-flash-lite-preview-02-05:free
+So fast!
+Pieces not movable.
+Home shouldn't have a piece.
+
+google/gemini-2.0-flash-exp:free
+Almost, some version incompatibility.
+
+deepseek/deepseek-r1:free
+Too many errors.
+
+google/gemini-2.0-pro-exp-02-05:free
+Repeat:
+* add blank template
+
+Trae.ai with Claude in Builder mode. Board looks good after a few minor tweaks.
+* "npx expo start --tunnel" to connect mobile app to metro builder.

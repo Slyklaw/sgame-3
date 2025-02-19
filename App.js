@@ -44,6 +44,38 @@ initialGameState.board[12][3] = { player: 2 };
 initialGameState.board[11][4] = { player: 2 };
 initialGameState.board[10][3] = { player: 2 };
 
+const calculateValidMoves = (x, y, board) => {
+  const moves = [];
+  const piece = board[x][y];
+  if (!piece) return moves;
+
+  // Count pieces in the column (including all pieces)
+  const N = board[x].filter(cell => cell).length;
+
+  // Check all possible directions
+  const directions = [
+    [-N, -N], [-N, 0], [-N, N],
+    [0, -N], [0, N],
+    [N, -N], [N, 0], [N, N]
+  ];
+
+  directions.forEach(([dx, dy]) => {
+    const newX = x + dx;
+    const newY = y + dy;
+
+    // Validate move is within board boundaries and not onto own piece
+    if (
+      newX >= 0 && newX < BOARD_SIZE.COLS &&
+      newY >= 0 && newY < BOARD_SIZE.ROWS &&
+      (!board[newX][newY] || board[newX][newY].player !== piece.player)
+    ) {
+      moves.push({ x: newX, y: newY });
+    }
+  });
+
+  return moves;
+};
+
 export default function App() {
   const [gameState, setGameState] = useState(initialGameState);
   const [boardSize, setBoardSize] = useState({ width: 0, height: 0 });
@@ -57,6 +89,87 @@ export default function App() {
     });
   }, []);
 
+  const handleSquarePress = (x, y) => {
+    const piece = gameState.board[x][y];
+
+    // If no piece is selected and the clicked square has current player's piece
+    if (!gameState.selectedPiece && piece?.player === gameState.currentPlayer) {
+      const validMoves = calculateValidMoves(x, y, gameState.board);
+      setGameState(prev => ({
+        ...prev,
+        selectedPiece: { x, y },
+        validMoves
+      }));
+      return;
+    }
+
+    // If a piece is selected and the clicked square is a valid move
+    if (gameState.selectedPiece && 
+        gameState.validMoves.some(move => move.x === x && move.y === y)) {
+      const newBoard = JSON.parse(JSON.stringify(gameState.board));
+      const { x: fromX, y: fromY } = gameState.selectedPiece;
+      const movingPiece = newBoard[fromX][fromY];
+      
+      let player1Score = gameState.player1Score;
+      let player2Score = gameState.player2Score;
+      let crownHolder = gameState.crownHolder;
+      
+      if (newBoard[x][y]?.player) {
+        if (newBoard[x][y].hasCrown) {
+          movingPiece.hasCrown = true;
+          crownHolder = gameState.currentPlayer;
+        }
+        
+        if (newBoard[x][y].player === 1) player1Score--;
+        else player2Score--;
+      }
+
+      let crownPosition = gameState.crownPosition;
+      if (x === crownPosition?.x && y === crownPosition?.y && !crownHolder) {
+        movingPiece.hasCrown = true;
+        crownHolder = gameState.currentPlayer;
+        crownPosition = null;
+      }
+
+      // Move the piece
+      newBoard[x][y] = movingPiece;
+      newBoard[fromX][fromY] = null;
+
+      // Check win conditions
+      let winner = null;
+      const isHome = (gameState.currentPlayer === 1 && x === 3 && y === 3) ||
+                    (gameState.currentPlayer === 2 && x === 11 && y === 3);
+      
+      if (movingPiece.hasCrown && isHome) {
+        winner = gameState.currentPlayer;
+      } else if (player1Score === 0) {
+        winner = 2;
+      } else if (player2Score === 0) {
+        winner = 1;
+      }
+
+      setGameState(prev => ({
+        ...prev,
+        board: newBoard,
+        currentPlayer: prev.currentPlayer === 1 ? 2 : 1,
+        selectedPiece: null,
+        validMoves: [],
+        player1Score,
+        player2Score,
+        crownPosition,
+        crownHolder,
+        winner
+      }));
+    } else {
+      // Deselect if clicking elsewhere
+      setGameState(prev => ({
+        ...prev,
+        selectedPiece: null,
+        validMoves: []
+      }));
+    }
+  };
+
   const renderBoard = () => {
     const squares = [];
     const squareSize = boardSize.width / BOARD_SIZE.COLS;
@@ -66,8 +179,15 @@ export default function App() {
       for (let x = 0; x < BOARD_SIZE.COLS; x++) {
         const isHome1 = x === 3 && y === 3;
         const isHome2 = x === 11 && y === 3;
-        const isCrown = x === gameState.crownPosition.x && y === gameState.crownPosition.y;
+        const isCrown = gameState.crownPosition && 
+                       x === gameState.crownPosition.x && 
+                       y === gameState.crownPosition.y;
         const piece = gameState.board[x][y];
+        const isSelected = gameState.selectedPiece?.x === x && 
+                          gameState.selectedPiece?.y === y;
+        const isValidMove = gameState.validMoves.some(
+          move => move.x === x && move.y === y
+        );
 
         row.push(
           <TouchableOpacity
@@ -77,17 +197,26 @@ export default function App() {
               {
                 width: squareSize,
                 height: squareSize,
-                backgroundColor: (x + y) % 2 === 0 ? darkTheme.colors.surface : '#2D2D2D',
+                backgroundColor: (x + y) % 2 === 0 ? 
+                  darkTheme.colors.surface : '#2D2D2D',
               },
               isHome1 && { backgroundColor: darkTheme.colors.player1 },
               isHome2 && { backgroundColor: darkTheme.colors.player2 },
+              isSelected && { backgroundColor: '#4A4A4A' },
+              isValidMove && { backgroundColor: '#3D5AFE' }
             ]}
+            onPress={() => handleSquarePress(x, y)}
           >
             {piece && (
               <View
                 style={[
                   styles.piece,
-                  { backgroundColor: piece.player === 1 ? darkTheme.colors.player1 : darkTheme.colors.player2 },
+                  { 
+                    backgroundColor: piece.player === 1 ? 
+                      darkTheme.colors.player1 : 
+                      darkTheme.colors.player2 
+                  },
+                  piece.hasCrown && styles.crownHolder
                 ]}
               />
             )}
@@ -111,9 +240,26 @@ export default function App() {
       <View style={styles.container}>
         <StatusBar style="light" />
         <View style={styles.header}>
-          <Text style={styles.playerText}>Player 1: {gameState.player1Score}</Text>
-          <Text style={styles.turnText}>Player {gameState.currentPlayer}'s Turn</Text>
-          <Text style={styles.playerText}>Player 2: {gameState.player2Score}</Text>
+          <Text style={[styles.playerText, { color: darkTheme.colors.player1 }]}>
+            Player 1: {gameState.player1Score}
+          </Text>
+          <Text 
+            style={[
+              styles.turnText, 
+              { 
+                color: gameState.currentPlayer === 1 ? 
+                  darkTheme.colors.player1 : 
+                  darkTheme.colors.player2 
+              }
+            ]}
+          >
+            {gameState.winner ? 
+              `Player ${gameState.winner} Wins!` : 
+              `Player ${gameState.currentPlayer}'s Turn`}
+          </Text>
+          <Text style={[styles.playerText, { color: darkTheme.colors.player2 }]}>
+            Player 2: {gameState.player2Score}
+          </Text>
         </View>
         <View
           style={[
@@ -178,7 +324,11 @@ const styles = StyleSheet.create({
   crown: {
     width: '60%',
     height: '60%',
-    backgroundColor: darkTheme.colors.primary,
+    backgroundColor: '#FFD700',
     borderRadius: 5,
+  },
+  crownHolder: {
+    borderColor: '#FFD700',
+    borderWidth: 4,
   },
 });
